@@ -5,40 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Premium PMEGP Subsidy Calculator | LoanMitra</title>
     
-    <!-- Fonts & Icons Library Links -->
+    <!-- Premium Fonts Baseline -->
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
     <link href="https://googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cloudflare.com">
-
+    
     <style>
-        /* ==========================================================================
-           1. CSS VARIABLES & SYSTEM RESET
-           ========================================================================== */
+        /* ==========================================
+           1. DESIGN SYSTEM VARIABLES & RESET
+           ========================================== */
         :root {
-            /* Color System - Premium Banking Theme */
-            --bg-deep: #060d1a;
-            --primary-grad: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-            --accent-grad: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            --text-main: #0f172a;
+            --bg-deep: #060b13;
+            --primary-gradient: linear-gradient(135deg, #0a192f 0%, #0d1e3d 100%);
+            --header-gradient: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            --accent-green: #10b981;
+            --accent-green-glow: rgba(16, 185, 129, 0.4);
+            --text-main: #f8fafc;
+            --text-dark: #0f172a;
             --text-muted: #64748b;
-            --text-white: #ffffff;
-            
-            /* Glassmorphism Configuration */
-            --glass-bg: rgba(255, 255, 255, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.4);
-            --glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-            --inner-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
-            
-            /* UI Accents */
-            --emerald: #10b981;
-            --emerald-light: #e6fbf4;
-            --error-red: #ef4444;
-            --error-bg: #fef2f2;
-            
-            /* Layout & Animations */
+            --error-red: #f43f5e;
+            --whatsapp-green: #25d366;
+
+            --glass-bg: rgba(255, 255, 255, 0.96);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --card-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
             --radius-lg: 24px;
-            --radius-md: 14px;
+            --radius-md: 16px;
             --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
@@ -47,6 +39,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
 
         body {
@@ -55,265 +48,292 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 2.5rem 1rem;
+            padding: 2rem 1rem;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* ==========================================================================
-           2. AMBIENT BACKGROUND BLOBS (ANIMATED)
-           ========================================================================== */
-        .ambient-bg {
+        /* Animated Ambient Background Matrix */
+        .bg-blur-matrix {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 1;
-            overflow: hidden;
+            z-index: 0;
             pointer-events: none;
+            overflow: hidden;
         }
 
         .blob {
             position: absolute;
-            width: 500px;
-            height: 500px;
             border-radius: 50%;
+            filter: blur(90px);
             mix-blend-mode: screen;
-            filter: blur(80px);
-            opacity: 0.18;
-            animation: floatBlob 16s infinite alternate ease-in-out;
+            opacity: 0.25;
+            animation: floatBlob 20s infinite alternate ease-in-out;
         }
 
         .blob-1 {
-            background: #1e40af;
             top: -10%;
             left: -10%;
-            animation-duration: 14s;
+            width: 500px;
+            height: 500px;
+            background: #1e40af;
+            animation-duration: 25s;
         }
 
         .blob-2 {
-            background: #10b981;
             bottom: -15%;
             right: -5%;
+            width: 600px;
+            height: 600px;
+            background: #0d9488;
             animation-duration: 18s;
+            animation-delay: 2s;
         }
 
         @keyframes floatBlob {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(60px, 40px) scale(1.15); }
-            100% { transform: translate(-40px, 80px) scale(0.9); }
+            0% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(50px, 60px) scale(1.1); }
+            100% { transform: translate(-30px, -40px) scale(0.9); }
         }
 
-        /* ==========================================================================
-           3. MAIN LAYOUT ARCHITECTURE
-           ========================================================================== */
-        .main-wrapper {
-            position: relative;
-            z-index: 2;
+        /* Main Workspace Container Wrapper */
+        .app-shell {
             width: 100%;
             max-width: 1150px;
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            box-shadow: var(--glass-shadow), var(--inner-shadow);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-radius: var(--radius-lg);
+            box-shadow: var(--card-shadow);
+            z-index: 10;
             overflow: hidden;
-            display: grid;
-            grid-template-columns: 1.25fr 0.75fr;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Left Actionable Panel */
-        .calculator-panel {
-            padding: 3.5rem;
+        .premium-header {
+            background: var(--header-gradient);
+            padding: 2.5rem;
+            border-bottom: 4px solid var(--accent-green);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Premium Gradient Header */
-        .brand-header {
-            margin-bottom: 2.5rem;
-        }
-
-        .brand-meta {
+        .brand-container {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            color: var(--emerald);
+            gap: 0.75rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .brand-icon-geometric {
+            width: 12px;
+            height: 28px;
+            background: var(--accent-green);
+            border-radius: 4px;
+            box-shadow: 0 0 15px var(--accent-green-glow);
+        }
+
+        .brand-txt {
+            font-size: 1.25rem;
             font-weight: 700;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            margin-bottom: 0.5rem;
+            color: var(--text-main);
         }
 
-        .brand-meta i {
-            font-size: 1.1rem;
+        .premium-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
         }
 
-        .brand-header h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            background: linear-gradient(120deg, #0f172a, #1e3a8a, #047857);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1.25;
+        .premium-header p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
         }
 
-        /* ==========================================================================
-           4. PREMIUM INPUT FORM & FOCUS EFFECTS
-           ========================================================================== */
-        .form-grid {
+        .workspace-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
+            grid-template-columns: 1.25fr 0.75fr;
+            background: #ffffff;
+        }
+
+        .calculator-block {
+            padding: 3rem;
+            border-right: 1px solid #e2e8f0;
+        }
+
+        /* ==========================================
+           2. FORM FIELDS & ARCHITECTURE
+           ========================================== */
+        .form-layout-matrix {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.75rem;
         }
 
         .span-full {
             grid-column: span 2;
         }
 
-        .form-group {
+        .interactive-group {
             display: flex;
             flex-direction: column;
-            gap: 0.55rem;
+            gap: 0.6rem;
             position: relative;
         }
 
-        .form-group label {
+        .interactive-group label {
             font-size: 0.85rem;
             font-weight: 600;
             color: #334155;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .form-group label i {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .form-group label .req {
+        .interactive-group label .required-node {
             color: var(--error-red);
         }
 
-        /* Input Wrapper for Field Positioning Icons */
-        .input-wrapper {
+        .field-wrapper {
             position: relative;
             display: flex;
             align-items: center;
         }
 
-        .input-wrapper i.field-icon {
+        .field-icon {
             position: absolute;
-            left: 1.1rem;
+            left: 1.2rem;
             color: #94a3b8;
-            font-size: 1rem;
-            transition: var(--transition-smooth);
+            width: 20px;
+            height: 20px;
             pointer-events: none;
+            transition: var(--transition-smooth);
         }
 
-        .input-wrapper input, 
-        .input-wrapper select {
+        .interactive-group input, 
+        .interactive-group select {
             width: 100%;
-            padding: 0.95rem 1rem 0.95rem 2.8rem;
-            font-size: 0.95rem;
+            padding: 1.1rem 1.2rem 1.1rem 3.2rem;
+            font-size: 1rem;
             font-weight: 500;
-            color: var(--text-main);
-            background: #ffffff;
+            color: var(--text-dark);
+            background: #f8fafc;
             border: 2px solid #e2e8f0;
             border-radius: var(--radius-md);
             outline: none;
             transition: var(--transition-smooth);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .interactive-group select {
+            padding-left: 1.5rem;
+            cursor: pointer;
             appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://w3.org' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1.2rem center;
+            background-size: 16px;
         }
 
-        /* Styled Chevron Arrow for Select dropdowns */
-        .input-wrapper .select-arrow {
-            position: absolute;
-            right: 1.2rem;
-            color: #64748b;
-            pointer-events: none;
-            font-size: 0.85rem;
-        }
-
-        .input-wrapper select {
-            padding-right: 2.5rem;
-        }
-
-        /* Sophisticated Focus states */
-        .input-wrapper input:focus, 
-        .input-wrapper select:focus {
-            border-color: #2563eb;
+        .interactive-group input:focus,
+        .interactive-group select:focus {
             background: #ffffff;
-            box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.12), 0 4px 12px rgba(0,0,0,0.05);
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 5px rgba(30, 58, 138, 0.15);
         }
 
-        .input-wrapper input:focus + i.field-icon,
-        .input-wrapper select:focus + i.field-icon {
-            color: #2563eb;
-            transform: scale(1.05);
+        .interactive-group input:focus + .field-icon {
+            color: #1e3a8a;
         }
 
-        /* Error States Layouts */
-        .form-group.has-error input,
-        .form-group.has-error select {
-            border-color: var(--error-red);
-            background: var(--error-bg);
-        }
-
-        .form-group.has-error input:focus {
-            box-shadow: 0 0 0 5px rgba(239, 68, 68, 0.15);
-        }
-
-        .error-msg {
+        .ui-validation-alert {
             color: var(--error-red);
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 500;
-            margin-top: 0.15rem;
+            margin-top: 0.2rem;
             display: none;
-            align-items: center;
-            gap: 0.3rem;
-            animation: fieldShake 0.4s ease;
+            animation: nodeFade 0.3s ease forwards;
         }
 
-        @keyframes fieldShake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-4px); }
-            40%, 80% { transform: translateX(4px); }
+        .interactive-group.alert-active input {
+            border-color: var(--error-red) !important;
+            background: #fff5f5 !important;
         }
 
-        /* Premium Explanatory Info Card Component */
-        .category-info-box {
-            background: var(--emerald-light);
-            border: 1px solid rgba(16, 185, 129, 0.25);
+        .category-info-panel {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
             border-radius: var(--radius-md);
-            padding: 1rem 1.25rem;
-            font-size: 0.78rem;
-            color: #065f46;
-            line-height: 1.6;
+            padding: 1.2rem;
+            margin-top: -0.5rem;
             display: flex;
             gap: 0.75rem;
-            align-items: flex-start;
-            margin-top: 0.25rem;
         }
 
-        .category-info-box i {
-            font-size: 1.1rem;
-            color: var(--emerald);
-            margin-top: 0.1rem;
+        .category-info-panel svg {
+            width: 22px;
+            height: 22px;
+            color: var(--accent-green);
+            flex-shrink: 0;
         }
 
-        /* ==========================================================================
-           5. INTERACTIVE BUTTON & LOADING CORE STATE
-           ========================================================================== */
-        .btn-submit-container {
-            margin-top: 1rem;
+        .category-info-panel p {
+            font-size: 0.82rem;
+            color: #14532d;
+            line-height: 1.6;
         }
 
-        .btn-calculate {
+        .action-button-layer {
+            margin-top: 2rem;
+        }
+
+        .btn-core-execution {
             width: 100%;
-            padding: 1.1rem;
-            background: var(--primary-grad);
+            padding: 1.2rem;
+            background: var(--text-dark);
+            color: var(--text-main);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15);
+            transition: var(--transition-smooth);
+        }
+
+        .btn-core-execution:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(15, 23, 42, 0.25);
+        }
+
+        .vector-loader {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spinVector 0.8s linear infinite;
+            display: none;
+        }
+
+        @keyframes spinVector {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ==========================================
+           3. ANALYTICS & SIDE OUTPUT PANELS
+           ========================================== */
+        .analytics-block {
+            padding: 3rem;
+            background: #f8fafc;
+            display: flex;
