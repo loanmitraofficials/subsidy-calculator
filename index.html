@@ -3,35 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium PMEGP Subsidy Calculator | LoanMitra</title>
+    <title>PMEGP Subsidy Calculator | LoanMitra</title>
     
-    <!-- Premium Fonts Baseline -->
+    <!-- Google Fonts Baseline -->
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
     <link href="https://googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         /* ==========================================
-           1. DESIGN SYSTEM VARIABLES & RESET
+           1. DESIGN SYSTEM VARIABLES & BRAND RESET
            ========================================== */
         :root {
-            --bg-deep: #060b13;
-            --primary-gradient: linear-gradient(135deg, #0a192f 0%, #0d1e3d 100%);
-            --header-gradient: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            --bg-deep: #0a192f;
+            --card-bg: rgba(255, 255, 255, 0.98);
+            --primary: #0f172a;
             --accent-green: #10b981;
-            --accent-green-glow: rgba(16, 185, 129, 0.4);
-            --text-main: #f8fafc;
-            --text-dark: #0f172a;
+            --accent-hover: #059669;
+            --text-dark: #1e293b;
             --text-muted: #64748b;
-            --error-red: #f43f5e;
+            --error-red: #ef4444;
             --whatsapp-green: #25d366;
-
-            --glass-bg: rgba(255, 255, 255, 0.96);
-            --glass-border: rgba(255, 255, 255, 0.8);
-            --card-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            
+            --radius-card: 24px;
+            --radius-input: 14px;
+            --shadow-premium: 0 25px 60px -15px rgba(0, 0, 0, 0.4);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -39,301 +36,301 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
-            -webkit-font-smoothing: antialiased;
         }
 
         body {
-            background-color: var(--bg-deep);
+            background: radial-gradient(circle at top right, #1e3a8a, var(--bg-deep) 60%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 2rem 1rem;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Animated Ambient Background Matrix */
-        .bg-blur-matrix {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(90px);
-            mix-blend-mode: screen;
-            opacity: 0.25;
-            animation: floatBlob 20s infinite alternate ease-in-out;
-        }
-
-        .blob-1 {
-            top: -10%;
-            left: -10%;
-            width: 500px;
-            height: 500px;
-            background: #1e40af;
-            animation-duration: 25s;
-        }
-
-        .blob-2 {
-            bottom: -15%;
-            right: -5%;
-            width: 600px;
-            height: 600px;
-            background: #0d9488;
-            animation-duration: 18s;
-            animation-delay: 2s;
-        }
-
-        @keyframes floatBlob {
-            0% { transform: translate(0px, 0px) scale(1); }
-            50% { transform: translate(50px, 60px) scale(1.1); }
-            100% { transform: translate(-30px, -40px) scale(0.9); }
-        }
-
-        /* Main Workspace Container Wrapper */
-        .app-shell {
-            width: 100%;
-            max-width: 1150px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--card-shadow);
-            z-index: 10;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .premium-header {
-            background: var(--header-gradient);
-            padding: 2.5rem;
-            border-bottom: 4px solid var(--accent-green);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .brand-container {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0.7rem;
-        }
-
-        .brand-icon-geometric {
-            width: 12px;
-            height: 28px;
-            background: var(--accent-green);
-            border-radius: 4px;
-            box-shadow: 0 0 15px var(--accent-green-glow);
-        }
-
-        .brand-txt {
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--text-main);
-        }
-
-        .premium-header h1 {
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--text-main);
-            letter-spacing: -0.5px;
-        }
-
-        .premium-header p {
-            color: #94a3b8;
-            font-size: 0.95rem;
-            margin-top: 0.25rem;
-        }
-
-        .workspace-grid {
-            display: grid;
-            grid-template-columns: 1.25fr 0.75fr;
-            background: #ffffff;
-        }
-
-        .calculator-block {
-            padding: 3rem;
-            border-right: 1px solid #e2e8f0;
         }
 
         /* ==========================================
-           2. FORM FIELDS & ARCHITECTURE
+           2. MAIN APP SHELL STYLING
            ========================================== */
-        .form-layout-matrix {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.75rem;
+        .calculator-card {
+            width: 100%;
+            max-width: 650px;
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-premium);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            animation: cardAppear 0.5s ease-out;
         }
 
-        .span-full {
+        @keyframes cardAppear {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Premium Brand Header Block */
+        .brand-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom: 4px solid var(--accent-green);
+        }
+
+        .brand-logo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-indicator {
+            width: 10px;
+            height: 24px;
+            background: var(--accent-green);
+            border-radius: 3px;
+        }
+
+        .brand-title-text {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .brand-header h1 {
+            color: #ffffff;
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        /* Form Controls Wrapper */
+        .form-body {
+            padding: 2.5rem 2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .span-2 {
             grid-column: span 2;
         }
 
-        .interactive-group {
+        .form-group {
             display: flex;
             flex-direction: column;
-            gap: 0.6rem;
-            position: relative;
+            gap: 0.5rem;
         }
 
-        .interactive-group label {
+        .form-group label {
             font-size: 0.85rem;
             font-weight: 600;
-            color: #334155;
+            color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .interactive-group label .required-node {
+        .form-group label .req {
             color: var(--error-red);
         }
 
-        .field-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .field-icon {
-            position: absolute;
-            left: 1.2rem;
-            color: #94a3b8;
-            width: 20px;
-            height: 20px;
-            pointer-events: none;
-            transition: var(--transition-smooth);
-        }
-
-        .interactive-group input, 
-        .interactive-group select {
+        /* Input Element Styling Matrix */
+        .form-group input, 
+        .form-group select {
             width: 100%;
-            padding: 1.1rem 1.2rem 1.1rem 3.2rem;
-            font-size: 1rem;
+            padding: 1rem 1.2rem;
+            font-size: 0.95rem;
             font-weight: 500;
             color: var(--text-dark);
             background: #f8fafc;
             border: 2px solid #e2e8f0;
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-input);
             outline: none;
             transition: var(--transition-smooth);
         }
 
-        .interactive-group select {
-            padding-left: 1.5rem;
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://w3.org' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1.2rem center;
-            background-size: 16px;
-        }
-
-        .interactive-group input:focus,
-        .interactive-group select:focus {
+        .form-group input:focus, 
+        .form-group select:focus {
             background: #ffffff;
             border-color: #1e3a8a;
-            box-shadow: 0 0 0 5px rgba(30, 58, 138, 0.15);
+            box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.1);
         }
 
-        .interactive-group input:focus + .field-icon {
-            color: #1e3a8a;
-        }
-
-        .ui-validation-alert {
-            color: var(--error-red);
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-top: 0.2rem;
-            display: none;
-            animation: nodeFade 0.3s ease forwards;
-        }
-
-        .interactive-group.alert-active input {
+        /* Beautiful Custom Form Field Validation Error Framework */
+        .form-group.has-error input {
             border-color: var(--error-red) !important;
             background: #fff5f5 !important;
         }
 
-        .category-info-panel {
+        .error-lbl {
+            color: var(--error-red);
+            font-size: 0.78rem;
+            font-weight: 500;
+            display: none;
+            animation: fieldFade 0.3s ease;
+        }
+
+        @keyframes fieldFade {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Category Information Box */
+        .info-panel {
             background: #f0fdf4;
             border: 1px solid #bbf7d0;
-            border-radius: var(--radius-md);
-            padding: 1.2rem;
-            margin-top: -0.5rem;
-            display: flex;
-            gap: 0.75rem;
+            border-radius: var(--radius-input);
+            padding: 1rem;
+            margin-top: -0.25rem;
         }
 
-        .category-info-panel svg {
-            width: 22px;
-            height: 22px;
-            color: var(--accent-green);
-            flex-shrink: 0;
-        }
-
-        .category-info-panel p {
-            font-size: 0.82rem;
+        .info-panel p {
+            font-size: 0.8rem;
             color: #14532d;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
-        .action-button-layer {
-            margin-top: 2rem;
-        }
-
-        .btn-core-execution {
+        /* Compute Primary Execution Button */
+        .btn-submit {
             width: 100%;
-            padding: 1.2rem;
-            background: var(--text-dark);
-            color: var(--text-main);
-            border: none;
-            border-radius: var(--radius-md);
-            font-size: 1.1rem;
+            padding: 1.1rem;
+            background: var(--primary);
+            color: #ffffff;
+            font-size: 1.05rem;
             font-weight: 600;
+            border: none;
+            border-radius: var(--radius-input);
             cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.75rem;
-            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15);
+            box-shadow: 0 8px 16px rgba(15, 23, 42, 0.15);
             transition: var(--transition-smooth);
         }
 
-        .btn-core-execution:hover {
+        .btn-submit:hover {
             background: #1e293b;
             transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(15, 23, 42, 0.25);
-        }
-
-        .vector-loader {
-            width: 24px;
-            height: 24px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top-color: #ffffff;
-            border-radius: 50%;
-            animation: spinVector 0.8s linear infinite;
-            display: none;
-        }
-
-        @keyframes spinVector {
-            to { transform: rotate(360deg); }
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
         }
 
         /* ==========================================
-           3. ANALYTICS & SIDE OUTPUT PANELS
+           3. OUTPUT COMPONENT MODULES
            ========================================== */
-        .analytics-block {
-            padding: 3rem;
+        .output-wrapper {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px dashed #e2e8f0;
+            display: none;
+            animation: cardAppear 0.4s ease-out forwards;
+        }
+
+        .results-box {
             background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius-card);
+            padding: 1.75rem;
+            text-align: center;
+        }
+
+        .results-box h2 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .percentage-badge {
+            display: inline-block;
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.08);
+            padding: 0.25rem 2rem;
+            border-radius: 50px;
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            margin-bottom: 1.5rem;
+        }
+
+        .ledger-item {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .ledger-item:last-of-type {
+            border-bottom: none;
+            margin-top: 0.5rem;
+            background: #ffffff;
+            padding: 1rem;
+            border-radius: var(--radius-input);
+            border: 1px solid #e2e8f0;
+        }
+
+        .ledger-lbl {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .ledger-val {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .ledger-item:last-of-type .ledger-val {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        /* Premium Integrated WhatsApp Dispatcher Link Wrap */
+        .btn-whatsapp {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.6rem;
+            width: 100%;
+            padding: 1.1rem;
+            background: var(--whatsapp-green);
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: var(--radius-input);
+            margin-top: 1.5rem;
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.2);
+            transition: var(--transition-smooth);
+        }
+
+        .btn-whatsapp:hover {
+            background: #20ba5a;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(37, 211, 102, 0.35);
+        }
+
+        /* Responsive Matrix Breakpoint */
+        @media (max-width: 520px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .span-2 { grid-column: span 1; }
+            .brand-header h1 { font-size: 1.4rem; }
+            .form-body { padding: 1.5rem 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="calculator-card">
+        <!-- Application Branding View Matrix Header -->
+        <header class="brand-header">
+            <div class="brand-logo-badge">
+                <div class="logo-indicator"></div>
+                <div class="brand-title-text">LoanMitra</div>
+            </div>
+            <h1>PMEGP Subsidy Calculator</h1>
+        </header>
+
