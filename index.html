@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium PMEGP Subsidy Calculator | LoanMitra</title>
+    
+    <!-- Fonts & Icons Library Links -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cloudflare.com">
+
+    <style>
+        /* ==========================================================================
+           1. CSS VARIABLES & SYSTEM RESET
+           ========================================================================== */
+        :root {
+            /* Color System - Premium Banking Theme */
+            --bg-deep: #060d1a;
+            --primary-grad: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            --accent-grad: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --text-white: #ffffff;
+            
+            /* Glassmorphism Configuration */
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            --inner-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
+            
+            /* UI Accents */
+            --emerald: #10b981;
+            --emerald-light: #e6fbf4;
+            --error-red: #ef4444;
+            --error-bg: #fef2f2;
+            
+            /* Layout & Animations */
+            --radius-lg: 24px;
+            --radius-md: 14px;
+            --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2.5rem 1rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ==========================================================================
+           2. AMBIENT BACKGROUND BLOBS (ANIMATED)
+           ========================================================================== */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            mix-blend-mode: screen;
+            filter: blur(80px);
+            opacity: 0.18;
+            animation: floatBlob 16s infinite alternate ease-in-out;
+        }
+
+        .blob-1 {
+            background: #1e40af;
+            top: -10%;
+            left: -10%;
+            animation-duration: 14s;
+        }
+
+        .blob-2 {
+            background: #10b981;
+            bottom: -15%;
+            right: -5%;
+            animation-duration: 18s;
+        }
+
+        @keyframes floatBlob {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(60px, 40px) scale(1.15); }
+            100% { transform: translate(-40px, 80px) scale(0.9); }
+        }
+
+        /* ==========================================================================
+           3. MAIN LAYOUT ARCHITECTURE
+           ========================================================================== */
+        .main-wrapper {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1150px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow), var(--inner-shadow);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1.25fr 0.75fr;
+        }
+
+        /* Left Actionable Panel */
+        .calculator-panel {
+            padding: 3.5rem;
+        }
+
+        /* Premium Gradient Header */
+        .brand-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .brand-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--emerald);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .brand-meta i {
+            font-size: 1.1rem;
+        }
+
+        .brand-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, #0f172a, #1e3a8a, #047857);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.25;
+        }
+
+        /* ==========================================================================
+           4. PREMIUM INPUT FORM & FOCUS EFFECTS
+           ========================================================================== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .span-full {
+            grid-column: span 2;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+            position: relative;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .form-group label i {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .form-group label .req {
+            color: var(--error-red);
+        }
+
+        /* Input Wrapper for Field Positioning Icons */
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper i.field-icon {
+            position: absolute;
+            left: 1.1rem;
+            color: #94a3b8;
+            font-size: 1rem;
+            transition: var(--transition-smooth);
+            pointer-events: none;
+        }
+
+        .input-wrapper input, 
+        .input-wrapper select {
+            width: 100%;
+            padding: 0.95rem 1rem 0.95rem 2.8rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-main);
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--radius-md);
+            outline: none;
+            transition: var(--transition-smooth);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            appearance: none;
+        }
+
+        /* Styled Chevron Arrow for Select dropdowns */
+        .input-wrapper .select-arrow {
+            position: absolute;
+            right: 1.2rem;
+            color: #64748b;
+            pointer-events: none;
+            font-size: 0.85rem;
+        }
+
+        .input-wrapper select {
+            padding-right: 2.5rem;
+        }
+
+        /* Sophisticated Focus states */
+        .input-wrapper input:focus, 
+        .input-wrapper select:focus {
+            border-color: #2563eb;
+            background: #ffffff;
+            box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.12), 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .input-wrapper input:focus + i.field-icon,
+        .input-wrapper select:focus + i.field-icon {
+            color: #2563eb;
+            transform: scale(1.05);
+        }
+
+        /* Error States Layouts */
+        .form-group.has-error input,
+        .form-group.has-error select {
+            border-color: var(--error-red);
+            background: var(--error-bg);
+        }
+
+        .form-group.has-error input:focus {
+            box-shadow: 0 0 0 5px rgba(239, 68, 68, 0.15);
+        }
+
+        .error-msg {
+            color: var(--error-red);
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-top: 0.15rem;
+            display: none;
+            align-items: center;
+            gap: 0.3rem;
+            animation: fieldShake 0.4s ease;
+        }
+
+        @keyframes fieldShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-4px); }
+            40%, 80% { transform: translateX(4px); }
+        }
+
+        /* Premium Explanatory Info Card Component */
+        .category-info-box {
+            background: var(--emerald-light);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            font-size: 0.78rem;
+            color: #065f46;
+            line-height: 1.6;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+            margin-top: 0.25rem;
+        }
+
+        .category-info-box i {
+            font-size: 1.1rem;
+            color: var(--emerald);
+            margin-top: 0.1rem;
+        }
+
+        /* ==========================================================================
+           5. INTERACTIVE BUTTON & LOADING CORE STATE
+           ========================================================================== */
+        .btn-submit-container {
+            margin-top: 1rem;
+        }
+
+        .btn-calculate {
+            width: 100%;
+            padding: 1.1rem;
+            background: var(--primary-grad);
